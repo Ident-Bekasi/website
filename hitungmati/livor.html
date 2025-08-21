@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livor Mortis: Pembekuan Darah Pasca Kematian</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@300;400;500&display=swap');
+
+        :root {
+            --primary: #00f7ff;
+            --secondary: #ff00ff;
+            --accent: #00ff87;
+            --dark: #0a0a1a;
+            --darker: #050510;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --warning: #ff6b6b;
+            --success: #00ff87;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-family: 'Exo 2', sans-serif;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 77, 148, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px var(--primary);
+            animation: pulse 2s infinite alternate;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: clamp(15px, 3vw, 25px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+
+        th, td {
+            padding: clamp(8px, 2vw, 12px) clamp(8px, 2vw, 15px);
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.3);
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .factor-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .factor-item {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .factor-item:before {
+            content: "•";
+            color: var(--primary);
+            position: absolute;
+            left: -20px;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .timeline-marker {
+            min-width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-right: 15px;
+            position: relative;
+        }
+
+        .timeline-marker:after {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            height: calc(100% + 20px);
+            width: 2px;
+            background: var(--primary);
+        }
+
+        .timeline-item:last-child .timeline-marker:after {
+            display: none;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-time {
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 5px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        .color-indicator {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .color-red { background-color: #ff4d4d; }
+        .color-purple { background-color: #944dff; }
+        .color-blue { background-color: #4d94ff; }
+        .color-green { background-color: #4dff94; }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 77, 148, 0.3);
+            box-shadow: 0 0 20px var(--primary);
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 15px var(--primary);
+            }
+            100% {
+                text-shadow: 0 0 25px var(--primary), 0 0 35px var(--secondary);
+            }
+        }
+
+        .glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 77, 148, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            filter: blur(50px);
+            z-index: -1;
+        }
+
+        .glow-1 {
+            top: -250px;
+            left: -250px;
+        }
+
+        .glow-2 {
+            bottom: -250px;
+            right: -250px;
+            background: radial-gradient(circle, rgba(77, 148, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .back-button {
+                position: relative;
+                margin-bottom: 20px;
+                left: 0;
+                top: 0;
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .grid {
+                gap: 15px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .timeline-item {
+                flex-direction: column;
+            }
+            
+            .timeline-marker {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .timeline-marker:after {
+                left: 10px;
+                top: 20px;
+                height: calc(100% + 10px);
+            }
+        }
+
+        /* Desktop-specific adjustments */
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .card-large {
+                grid-column: span 2;
+            }
+        }
+
+        /* Very small devices */
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .card-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .card-title i {
+                margin-bottom: 8px;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .particles, .glow, .back-button {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .card {
+                background: white;
+                border: 1px solid #ddd;
+                box-shadow: none;
+            }
+            
+            .card-title {
+                color: #0066cc;
+            }
+            
+            table {
+                background: white;
+                color: black;
+            }
+            
+            th {
+                background: #f5f5f5;
+                color: #0066cc;
+            }
+            
+            .color-indicator {
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="title">LIVOR MORTIS</h1>
+            <h1 class="card-title-center">Pembekuan Darah Pasca Kematian</h1>
+            <p class="subtitle">IDENT KAB-BEKASI</p>
+            <a href="javascript:history.back()" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+        </header>
+        
+        <div class="grid">
+            <!-- Card Pengertian -->
+            <div class="card">
+                <h2 class="card-title">Pengertian Livor Mortis</h2>
+                <p>Livor mortis (dari bahasa Latin <em>livor</em> yang berarti "warna kebiruan" dan <em>mortis</em> yang berarti "kematian") adalah perubahan warna pada tubuh setelah kematian akibat pengendapan darah di bagian tubuh yang paling rendah karena gravitasi. Fenomena ini juga dikenal sebagai <em>postmortem lividity</em> atau <em>hypostasis</em>.</p>
+                <p>Livor mortis terjadi karena setelah kematian, sirkulasi darah berhenti, dan darah yang tidak lagi bersirkulasi mulai mengendap di pembuluh darah kapiler di bagian tubuh yang paling rendah akibat gravitasi.</p>
+            </div>
+            
+            <!-- Card Mekanisme -->
+            <div class="card">
+                <h2 class="card-title">Mekanisme Livor Mortis</h2>
+                <p>Proses livor mortis terjadi melalui tahapan berikut:</p>
+                <ul class="factor-list">
+                    <li class="factor-item"><strong>Henti sirkulasi:</strong> Setelah kematian, jantung berhenti memompa darah, sehingga darah tidak lagi bersirkulasi.</li>
+                    <li class="factor-item"><strong>Gravitasi:</strong> Darah yang tidak bersirkulasi mulai mengendap di pembuluh darah kapiler karena pengaruh gravitasi.</li>
+                    <li class="factor-item"><strong>Pengendapan:</strong> Sel darah merah mengendap di bagian tubuh yang paling rendah.</li>
+                    <li class="factor-item"><strong>Perubahan warna:</strong> Akumulasi darah menyebabkan perubahan warna kulit menjadi kemerahan-keunguan.</li>
+                    <li class="factor-item"><strong>Fiksasi:</strong> Seiring waktu, livor mortis menjadi "fixed" atau menetap dan tidak akan berpindah bahkan jika tubuh dipindahkan.</li>
+                </ul>
+            </div>
+            
+            <!-- Card Timeline -->
+            <div class="card card-large">
+                <h2 class="card-title">Timeline Livor Mortis</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">0-30 menit pasca kematian</div>
+                            <p>Livor mortis mulai terbentuk. Bintik-bintik merah muda samar mulai muncul di bagian tubuh terendah.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">30 menit - 2 jam pasca kematian</div>
+                            <p>Livor mortis semakin jelas terlihat. Warna kemerahan-keunguan menjadi lebih intens dan menyebar.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">2-4 jam pasca kematian</div>
+                            <p>Livor mortis menyatu membentuk area yang lebih besar. Warna menjadi lebih gelap dan jelas.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">4-6 jam pasca kematian</div>
+                            <p>Livor mortis mencapai perkembangan maksimal. Warna menjadi sangat jelas dan terlihat di seluruh area tubuh yang rendah.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-time">6-12 jam pasca kematian</div>
+                            <p>Livor mortis menjadi "fixed" atau menetap. Tekanan pada area tersebut tidak lagi menyebabkan blanching (memudarnya warna).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card Tabel Data -->
+            <div class="card card-large">
+                <h2 class="card-title">Tabel Data Livor Mortis</h2>
+                <p>Berikut adalah tabel perkembangan livor mortis berdasarkan waktu sejak kematian:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Waktu sejak Kematian</th>
+                            <th>Tahap Livor Mortis</th>
+                            <th>Karakteristik</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0-30 menit</td>
+                            <td>Mulai</td>
+                            <td>Bintik-bintik merah muda samar</td>
+                            <td>Non-fixed</td>
+                        </tr>
+                        <tr>
+                            <td>30 menit - 2 jam</td>
+                            <td>Perkembangan</td>
+                            <td>Warna kemerahan-keunguan intens</td>
+                            <td>Non-fixed</td>
+                        </tr>
+                        <tr>
+                            <td>2-4 jam</td>
+                            <td>Penyatuan</td>
+                            <td>Area menyatu, warna lebih gelap</td>
+                            <td>Non-fixed</td>
+                        </tr>
+                        <tr>
+                            <td>4-6 jam</td>
+                            <td>Maksimal</td>
+                            <td>Warna sangat jelas, area luas</td>
+                            <td>Non-fixed</td>
+                        </tr>
+                        <tr>
+                            <td>6-8 jam</td>
+                            <td>Transisi</td>
+                            <td>Mulai menetap, blanching berkurang</td>
+                            <td>Partial fixed</td>
+                        </tr>
+                        <tr>
+                            <td>8-12 jam</td>
+                            <td>Fixed</td>
+                            <td>Warna menetap, tidak blanching</td>
+                            <td>Fixed</td>
+                        </tr>
+                        <tr>
+                            <td>12+ jam</td>
+                            <td>Menetap</td>
+                            <td>Tidak berubah meski tubuh dipindah</td>
+                            <td>Fixed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Card Warna dan Interpretasi -->
+            <div class="card">
+                <h2 class="card-title">Warna dan Interpretasi</h2>
+                <p>Warna livor mortis dapat memberikan petunjuk tentang penyebab kematian:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Warna</th>
+                            <th>Interpretasi</th>
+                            <th>Contoh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="color-indicator color-red"></span> Merah muda/merah</td>
+                            <td>Normal</td>
+                            <td>Kematian alami</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-indicator color-purple"></span> Ungu gelap</td>
+                            <td>Hipoksia</td>
+                            <td>Asfiksia, gagal pernapasan</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-indicator color-blue"></span> Biru</td>
+                            <td>Keracunan</td>
+                            <td>CO, sianida, bahan kimia</td>
+                        </tr>
+                        <tr>
+                            <td><span class="color-indicator color-green"></span> Hijau</td>
+                            <td>Pembusukan</td>
+                            <td>Fase lanjut pembusukan</td>
+                        </tr>
+                        <tr>
+                            <td>Pucat/tidak ada</td>
+                            <td>Anemia/kehilangan darah</td>
+                            <td>Perdarahan masif</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Card Faktor-faktor -->
+            <div class="card">
+                <h2 class="card-title">Faktor-faktor yang Memengaruhi</h2>
+                <p>Laju perkembangan livor mortis dipengaruhi oleh berbagai faktor:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Faktor</th>
+                            <th>Pengaruh pada Livor Mortis</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Suhu Lingkungan</td>
+                            <td>Suhu tinggi mempercepat, suhu rendah memperlambat</td>
+                        </tr>
+                        <tr>
+                            <td>Sirkulasi sebelum kematian</td>
+                            <td>Gagal jantung mempercepat, anemia memperlambat</td>
+                        </tr>
+                        <tr>
+                            <td>Posisi tubuh</td>
+                            <td>Posisi terbalik menyebabkan livor di kepala</td>
+                        </tr>
+                        <tr>
+                            <td>Penyebab kematian</td>
+                            <td>Keracunan CO menyebabkan livor merah cerah</td>
+                        </tr>
+                        <tr>
+                            <td>Obstruksi pembuluh darah</td>
+                            <td>Area tertekan bebas dari livor</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Card Pentingnya Forensik -->
+            <div class="card">
+                <h2 class="card-title">Pentingnya dalam Forensik</h2>
+                <p>Livor mortis merupakan indikator penting dalam investigasi forensik:</p>
+                <ul class="factor-list">
+                    <li class="factor-item"><strong>Perkiraan waktu kematian:</strong> Perkembangan livor membantu memperkirakan PMI (Post-Mortem Interval)</li>
+                    <li class="factor-item"><strong>Posisi tubuh setelah kematian:</strong> Pola livor menunjukkan apakah tubuh dipindahkan setelah kematian</li>
+                    <li class="factor-item"><strong>Penyebab kematian:</strong> Warna livor dapat mengindikasikan penyebab kematian tertentu</li>
+                    <li class="factor-item"><strong>Kondisi khusus:</strong> Area tanpa livor menunjukkan tekanan atau obstruksi</li>
+                </ul>
+                <p>Pemeriksaan livor mortis harus dilakukan dengan hati-hati dan dikombinasikan dengan tanda-tanda post-mortem lainnya untuk hasil yang akurat.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 Forensic Time Estimator | NOVY-25</p>
+        </footer>
+    </div>
+
+    <script>
+        // Membuat partikel latar belakang
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Ukuran dan posisi acak
+                const size = Math.random() * 20 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}vw`;
+                particle.style.top = `${posY}vh`;
+                
+                // Warna acak (merah muda atau ungu)
+                const color = Math.random() > 0.5 ? '255, 77, 148' : '148, 77, 255';
+                particle.style.background = `rgba(${color}, ${0.2 + Math.random() * 0.3})`;
+                particle.style.boxShadow = `0 0 20px rgba(${color}, 0.5)`;
+                
+                // Animasi dengan durasi acak
+                const duration = Math.random() * 20 + 15;
+                particle.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Inisialisasi
+        window.addEventListener('load', function() {
+            createParticles();
+        });
+    </script>
+</body>
+</html>
