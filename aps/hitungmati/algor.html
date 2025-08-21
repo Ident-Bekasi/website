@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algor Mortis: Penurunan Suhu Tubuh Pasca Kematian</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@300;400;500&display=swap');
+
+        :root {
+            --primary: #00f7ff;
+            --secondary: #ff00ff;
+            --accent: #00ff87;
+            --dark: #0a0a1a;
+            --darker: #050510;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --warning: #ff6b6b;
+            --success: #00ff87;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px var(--primary);
+            animation: pulse 2s infinite alternate;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: var(--darker);
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 247, 255, 0.4);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.3);
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .factor-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .factor-item {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .factor-item:before {
+            content: "•";
+            color: var(--primary);
+            position: absolute;
+            left: -20px;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .formula-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 247, 255, 0.3);
+            box-shadow: 0 0 20px var(--primary);
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 15px var(--primary);
+            }
+            100% {
+                text-shadow: 0 0 25px var(--primary), 0 0 35px var(--secondary);
+            }
+        }
+
+        .glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 247, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            filter: blur(50px);
+            z-index: -1;
+        }
+
+        .glow-1 {
+            top: -250px;
+            left: -250px;
+        }
+
+        .glow-2 {
+            bottom: -250px;
+            right: -250px;
+            background: radial-gradient(circle, rgba(255, 0, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="title">ALGOR MORTIS</h1>
+            <h1 class="card-title-center">Penurunan Suhu Tubuh Pasca Kematian</h1>
+            <p class="subtitle">IDENT KAB-BEKASI</p>
+        </header>
+        
+        <div class="grid">
+            <!-- Card Pengertian -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-snowflake"></i> Pengertian Algor Mortis</h2>
+                <p>Algor mortis (dari bahasa Latin <em>algor</em> yang berarti "dingin" dan <em>mortis</em> yang berarti "kematian") adalah proses penurunan suhu tubuh menuju suhu lingkungan setelah kematian terjadi. Ini adalah salah satu dari tiga tanda utama kematian yang diamati dalam fase awal (bersama dengan rigor mortis dan livor mortis).</p>
+            </div>
+            
+            <!-- Card Mekanisme -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-cogs"></i> Mekanisme Algor Mortis</h2>
+                <p>Setelah kematian, tubuh tidak lagi menghasilkan panas melalui metabolisme. Tubuh kemudian kehilangan panas melalui empat mekanisme fisik utama:</p>
+                <ul class="factor-list">
+                    <li class="factor-item"><strong>Radiasi:</strong> Pelepasan panas ke lingkungan dalam bentuk gelombang infra merah (mekanisme utama).</li>
+                    <li class="factor-item"><strong>Konveksi:</strong> Perpindahan panas melalui pergerakan udara/air di sekitar tubuh.</li>
+                    <li class="factor-item"><strong>Konduksi:</strong> Perpindahan panas melalui kontak langsung dengan permukaan yang lebih dingin.</li>
+                    <li class="factor-item"><strong>Evaporasi:</strong> Penguapan cairan dari permukaan tubuh yang membutuhkan energi panas.</li>
+                </ul>
+            </div>
+            
+            <!-- Card Faktor-faktor -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-wind"></i> Faktor-faktor yang Memengaruhi</h2>
+                <p>Laju pendinginan tubuh dipengaruhi oleh berbagai faktor:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Faktor</th>
+                            <th>Pengaruh</th>
+                            <th>Contoh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Suhu Lingkungan</td>
+                            <td>Faktor Paling Penting</td>
+                            <td>Suhu ekstrem memperlambat atau mempercepat</td>
+                        </tr>
+                        <tr>
+                            <td>Kelembaban & Aliran Udara</td>
+                            <td>Sangat Signifikan</td>
+                            <td>Udara lembab dan berangin mempercepat pendinginan</td>
+                        </tr>
+                        <tr>
+                            <td>Pakaian atau Penutup</td>
+                            <td>Memperlambat</td>
+                            <td>Pakaian tebal memperlambat kehilangan panas</td>
+                        </tr>
+                        <tr>
+                            <td>Massa Tubuh & Lemak</td>
+                            <td>Memperlambat</td>
+                            <td>Orang gemuk mendingin lebih lambat</td>
+                        </tr>
+                        <tr>
+                            <td>Posisi & Lingkungan Tubuh</td>
+                            <td>Signifikan</td>
+                            <td>Tubuh di lantai beton dingin lebih cepat</td>
+                        </tr>
+                        <tr>
+                            <td>Penyebab Kematian</td>
+                            <td>Dapat Mempengaruhi</td>
+                            <td>Perdarahan masif mempercepat pendinginan</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Card Tabel Data -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-table"></i> Tabel Data Algor Mortis</h2>
+                <p>Berikut adalah tabel perkiraan suhu tubuh berdasarkan waktu sejak kematian (dalam kondisi normal):</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Waktu (Jam)</th>
+                            <th>Suhu Rectal (°C)</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>37.0</td>
+                            <td>98.6</td>
+                            <td>Saat kematian</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>36.1 - 36.4</td>
+                            <td>97.0 - 97.5</td>
+                            <td>Proses pendinginan mulai terukur</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>35.2 - 35.8</td>
+                            <td>95.4 - 96.4</td>
+                            <td>Proses pendinginan mulai terukur</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>34.4 - 35.2</td>
+                            <td>93.9 - 95.4</td>
+                            <td>Proses pendinginan mulai terukur</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>33.6 - 34.6</td>
+                            <td>92.5 - 94.3</td>
+                            <td>Proses pendinginan mulai terukur</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>32.8 - 33.9</td>
+                            <td>91.0 - 93.0</td>
+                            <td>Proses pendinginan mulai terukur</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>32.0 - 33.2</td>
+                            <td>89.6 - 91.8</td>
+                            <td>Proses pendinginan mulai terukur</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>30.6 - 31.9</td>
+                            <td>87.1 - 89.4</td>
+                            <td>Proses pendinginan mulai terukur</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td>29.2 - 30.7</td>
+                            <td>84.6 - 87.3</td>
+                            <td>Proses pendinginan mulai terukur</td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td>27.8 - 29.5</td>
+                            <td>82.0 - 85.1</td>
+                            <td>Metode algor mortis mulai kurang akurat</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>~24.0 - ~26.5</td>
+                            <td>~75.2 - ~79.7</td>
+                            <td>Perlu metode lain (Livor/Rigor Mortis, Kimia Mata)</td>
+                        </tr>
+                        <tr>
+                            <td>24</td>
+                            <td>~21.0 - ~24.0</td>
+                            <td>~69.8 - ~75.2</td>
+                            <td>Mendekati suhu lingkungan. Algor mortis tidak reliable lagi</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="subtitle" style="font-size: 0.9rem; margin-top: 15px;">
+                    * Asumsi: Suhu lingkungan 20°C, korban dengan berat rata-rata, pakaian tipis
+                </p>
+            </div>
+            
+            <!-- Card Rumus Perhitungan -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-calculator"></i> Rumus Perhitungan</h2>
+                <p>Estimasi waktu kematian dapat dihitung dengan rumus berikut:</p>
+                
+                <div class="formula">
+                    <div class="formula-title">Aturan Sederhana (Perkiraan Kasar)</div>
+                    Perkiraan Jam sejak Kematian = (Suhu Rectal Normal - Suhu Rectal Terukur) / Laju Pendinginan
+                </div>
+                
+                <p>Laju pendinginan sering diasumsikan <strong>1°C per jam</strong> untuk jam pertama, <strong>0.8°C per jam</strong> untuk jam berikutnya, hingga mendekati suhu lingkungan.</p>
+                
+                <div class="formula">
+                    <div class="formula-title">Rumus Henssge (Modern - Lebih Akurat)</div>
+                    PMI (jam) = (37.2°C - Suhu Rectal Terukur) / (K × Laju Koreksi)
+                </div>
+                
+                <p>Dimana <strong>K</strong> adalah koefisien pendinginan (~0.125) dan <strong>Laju Koreksi</strong> adalah faktor yang disesuaikan berdasarkan berat badan dan suhu lingkungan.</p>
+            </div>
+            
+            <!-- Card Kalkulator Sederhana -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-calculator"></i> Kalkulator Sederhana</h2>
+                <div class="form-group">
+                    <label for="bodyTemp">Suhu Tubuh Korban (°C)</label>
+                    <input type="number" id="bodyTemp" step="0.1" min="0" max="45" placeholder="Contoh: 32.5">
+                </div>
+                <div class="form-group">
+                    <label for="envTemp">Suhu Lingkungan (°C)</label>
+                    <input type="number" id="envTemp" step="0.1" min="-10" max="50" placeholder="Contoh: 25.0">
+                </div>
+                <button class="btn" id="calculateBtn">Hitung Perkiraan Waktu</button>
+                <div id="result" style="text-align: center; font-size: 1.2rem; margin-top: 20px; color: var(--primary);"></div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 Forensic Time Estimator | NOVY-25</p>
+        </footer>
+    </div>
+
+    <script>
+        // Membuat partikel latar belakang
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Ukuran dan posisi acak
+                const size = Math.random() * 20 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}vw`;
+                particle.style.top = `${posY}vh`;
+                
+                // Warna acak (cyan atau magenta)
+                const color = Math.random() > 0.5 ? '0, 247, 255' : '255, 0, 255';
+                particle.style.background = `rgba(${color}, ${0.2 + Math.random() * 0.3})`;
+                particle.style.boxShadow = `0 0 20px rgba(${color}, 0.5)`;
+                
+                // Animasi dengan durasi acak
+                const duration = Math.random() * 20 + 15;
+                particle.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Fungsi untuk menghitung perkiraan waktu kematian
+        function calculateTime() {
+            const bodyTemp = parseFloat(document.getElementById('bodyTemp').value);
+            const envTemp = parseFloat(document.getElementById('envTemp').value);
+            
+            if (isNaN(bodyTemp) || isNaN(envTemp)) {
+                document.getElementById('result').textContent = 'Masukkan suhu yang valid!';
+                return;
+            }
+            
+            if (bodyTemp > 37) {
+                document.getElementById('result').textContent = 'Suhu tubuh tidak mungkin lebih tinggi dari 37°C setelah kematian!';
+                return;
+            }
+            
+            // Rumus sederhana: (37 - suhu tubuh) / laju pendinginan
+            // Laju pendinginan disesuaikan dengan suhu lingkungan
+            const tempDiff = 37 - bodyTemp;
+            let coolingRate = 0.8; // Laju pendinginan dasar
+            
+            // Penyesuaian berdasarkan suhu lingkungan
+            if (envTemp < 10) {
+                coolingRate = 0.5; // Lebih lambat di lingkungan dingin
+            } else if (envTemp > 30) {
+                coolingRate = 1.0; // Lebih cepat di lingkungan panas
+            }
+            
+            const hours = tempDiff / coolingRate;
+            
+            if (hours < 0) {
+                document.getElementById('result').textContent = 'Suhu tubuh tidak valid untuk perhitungan!';
+            } else if (hours < 1) {
+                document.getElementById('result').textContent = `Perkiraan waktu sejak kematian: kurang dari 1 jam`;
+            } else {
+                const hoursInt = Math.floor(hours);
+                const minutes = Math.round((hours - hoursInt) * 60);
+                
+                document.getElementById('result').innerHTML = `
+                    Perkiraan waktu sejak kematian: <strong>${hoursInt} jam ${minutes} menit</strong>
+                    <br><span style="font-size: 0.8rem;">(Menggunakan laju pendinginan ${coolingRate}°C per jam)</span>
+                `;
+            }
+        }
+
+        // Event listener untuk tombol hitung
+        document.getElementById('calculateBtn').addEventListener('click', calculateTime);
+
+        // Inisialisasi
+        window.addEventListener('load', function() {
+            createParticles();
+        });
+    </script>
+</body>
+</html>
