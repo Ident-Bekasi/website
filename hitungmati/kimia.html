@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perubahan Kimia dalam Mata Pasca Kematian</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Exo+2:wght@300;400;500&display=swap');
+
+        :root {
+            --primary: #00f7ff;
+            --secondary: #2600ff;
+            --accent: #00ff87;
+            --dark: #0a0a1a;
+            --darker: #050510;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --warning: #ff6b6b;
+            --success: #00ff87;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-family: 'Exo 2', sans-serif;
+            z-index: 10;
+        }
+
+        .back-button:hover {
+            background: rgba(106, 90, 205, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .back-button i {
+            margin-right: 8px;
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px var(--primary);
+            animation: pulse 2s infinite alternate;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: clamp(15px, 3vw, 25px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+        }
+
+        th, td {
+            padding: clamp(8px, 2vw, 12px) clamp(8px, 2vw, 15px);
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.3);
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .factor-list {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .factor-item {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .factor-item:before {
+            content: "•";
+            color: var(--primary);
+            position: absolute;
+            left: -20px;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .timeline-marker {
+            min-width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            margin-right: 15px;
+            position: relative;
+        }
+
+        .timeline-marker:after {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 10px;
+            height: calc(100% + 20px);
+            width: 2px;
+            background: var(--primary);
+        }
+
+        .timeline-item:last-child .timeline-marker:after {
+            display: none;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-time {
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 5px;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        .chemical-chart {
+            width: 100%;
+            height: 300px;
+            margin: 20px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+        }
+
+        .chemical-bar {
+            width: 40px;
+            background: linear-gradient(to top, var(--primary), var(--secondary));
+            margin: 0 5px;
+            position: relative;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            text-align: center;
+            width: 100px;
+            margin-left: -30px;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(106, 90, 205, 0.3);
+            box-shadow: 0 0 20px var(--primary);
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                text-shadow: 0 0 15px var(--primary);
+            }
+            100% {
+                text-shadow: 0 0 25px var(--primary), 0 0 35px var(--secondary);
+            }
+        }
+
+        .glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(106, 90, 205, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            filter: blur(50px);
+            z-index: -1;
+        }
+
+        .glow-1 {
+            top: -250px;
+            left: -250px;
+        }
+
+        .glow-2 {
+            bottom: -250px;
+            right: -250px;
+            background: radial-gradient(circle, rgba(90, 205, 198, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .back-button {
+                position: relative;
+                margin-bottom: 20px;
+                left: 0;
+                top: 0;
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .grid {
+                gap: 15px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .timeline-item {
+                flex-direction: column;
+            }
+            
+            .timeline-marker {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .timeline-marker:after {
+                left: 10px;
+                top: 20px;
+                height: calc(100% + 10px);
+            }
+            
+            .chemical-chart {
+                flex-direction: column;
+                height: auto;
+                align-items: center;
+                padding: 10px;
+            }
+            
+            .chemical-bar {
+                width: 80%;
+                height: 40px;
+                margin: 5px 0;
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 10px;
+            }
+            
+            .bar-label, .bar-value {
+                position: static;
+                transform: none;
+                margin: 0;
+                width: auto;
+                font-size: 0.9rem;
+            }
+            
+            .bar-value {
+                order: 1;
+                font-weight: bold;
+            }
+            
+            .bar-label {
+                order: 2;
+            }
+            
+            /* Improve text readability on mobile */
+            p, li, td {
+                font-size: clamp(0.9rem, 1.2vw, 1rem);
+                line-height: 1.6;
+            }
+            
+            /* Adjust card title for better mobile view */
+            .card-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .card-title i {
+                margin-bottom: 8px;
+            }
+        }
+
+        /* Desktop-specific adjustments */
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .card-large {
+                grid-column: span 2;
+            }
+        }
+
+        /* Medium devices (tablets) */
+        @media (min-width: 769px) and (max-width: 1023px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .card-large {
+                grid-column: span 2;
+            }
+            
+            .chemical-chart {
+                height: 250px;
+            }
+            
+            .chemical-bar {
+                width: 35px;
+            }
+        }
+
+        /* Very small devices */
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.8rem;
+            }
+            
+            .card-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .card-title i {
+                margin-bottom: 8px;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+                font-size: 0.75rem;
+            }
+            
+            /* Stack cards in a single column on very small screens */
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-large {
+                grid-column: span 1;
+            }
+            
+            /* Improve chemical chart for very small screens */
+            .chemical-bar {
+                width: 90%;
+                padding: 0 8px;
+            }
+            
+            .bar-label, .bar-value {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Large desktop screens */
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1400px;
+            }
+            
+            .chemical-chart {
+                height: 350px;
+            }
+            
+            .chemical-bar {
+                width: 50px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .particles, .glow, .back-button {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+                font-size: 12pt;
+            }
+            
+            .container {
+                max-width: 100%;
+                padding: 20px;
+            }
+            
+            .card {
+                background: white;
+                border: 1px solid #ddd;
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+            
+            .card-title {
+                color: #0066cc;
+            }
+            
+            table {
+                background: white;
+                color: black;
+                font-size: 10pt;
+            }
+            
+            th {
+                background: #f5f5f5;
+                color: #0066cc;
+            }
+            
+            .grid {
+                display: block;
+            }
+            
+            .card {
+                margin-bottom: 20px;
+            }
+            
+            .chemical-chart {
+                display: none;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --glass: rgba(255, 255, 255, 0.1);
+                --glass-border: rgba(255, 255, 255, 0.3);
+            }
+            
+            .card {
+                border: 2px solid var(--glass-border);
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .particle {
+                display: none;
+            }
+            
+            .title {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="title">PERUBAHAN KORNEA MATA</h1>
+            <h1 class="card-title-center">Analisis Vitreous Humor untuk Estimasi Waktu Kematian</h1>
+            <p class="subtitle">IDENT KAB-BEKASI</p>
+            <a href="javascript:history.back()" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Kembali
+            </a>
+        </header>
+        
+        <div class="grid">
+            <!-- Card Pengertian -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-eye"></i> Pengertian</h2>
+                <p>Perubahan kimia dalam mata, khususnya pada <strong>vitreous humor</strong>, adalah salah satu metode yang paling dapat diandalkan untuk memperkirakan waktu kematian (Post Mortem Interval/PMI) setelah 24-48 jam pertama.</p>
+                <p>Vitreous humor adalah cairan bening seperti gel yang mengisi ruang antara lensa dan retina di dalam mata. Karena terlindungi oleh bola mata, cairan ini lebih tahan terhadap kontaminasi dan perubahan lingkungan dibandingkan dengan cairan tubuh lainnya.</p>
+            </div>
+            
+            <!-- Card Pentingnya Vitreous Humor -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-flask"></i> Pentingnya Vitreous Humor</h2>
+                <p>Vitreous humor memiliki beberapa karakteristik yang membuatnya sangat berharga dalam investigasi forensik:</p>
+                <ul class="factor-list">
+                    <li class="factor-item">Terisolasi dengan baik dari lingkungan eksternal</li>
+                    <li class="factor-item">Tahan terhadap pembusukan bakteri dalam jangka waktu tertentu</li>
+                    <li class="factor-item">Komposisi kimia yang relatif stabil</li>
+                    <li class="factor-item">Perubahan konsentrasi elektrolit yang dapat diprediksi</li>
+                    <li class="factor-item">Dapat digunakan untuk deteksi obat-obatan dan toksin</li>
+                </ul>
+            </div>
+            
+            <!-- Card Perubahan Kimia -->
+            <div class="card card-large">
+                <h2 class="card-title"><i class="fas fa-atom"></i> Perubahan Kimia dalam Vitreous Humor</h2>
+                <p>Setelah kematian, terjadi perubahan konsentrasi berbagai elektrolit dan senyawa kimia dalam vitreous humor:</p>
+                
+                <div class="chemical-chart">
+                    <div class="chemical-bar" style="height: 80%;">
+                        <div class="bar-value">+380%</div>
+                        <div class="bar-label">Kalium (K⁺)</div>
+                    </div>
+                    <div class="chemical-bar" style="height: 30%;">
+                        <div class="bar-value">-30%</div>
+                        <div class="bar-label">Natrium (Na⁺)</div>
+                    </div>
+                    <div class="chemical-bar" style="height: 25%;">
+                        <div class="bar-value">-25%</div>
+                        <div class="bar-label">Klorida (Cl⁻)</div>
+                    </div>
+                    <div class="chemical-bar" style="height: 45%;">
+                        <div class="bar-value">+45%</div>
+                        <div class="bar-label">Urea</div>
+                    </div>
+                    <div class="chemical-bar" style="height: 60%;">
+                        <div class="bar-value">+60%</div>
+                        <div class="bar-label">Kreatinin</div>
+                    </div>
+                </div>
+                
+                <p>Perubahan paling signifikan terjadi pada kadar <strong>kalium (K⁺)</strong>, yang meningkat secara linear dan dapat diprediksi, menjadikannya indikator paling andal untuk estimasi PMI.</p>
+            </div>
+            
+            <!-- Card Tabel Data Kalium -->
+            <div class="card card-large">
+                <h2 class="card-title"><i class="fas fa-table"></i> Tabel Data Perubahan Kadar Kalium</h2>
+                <p>Berikut adalah tabel perubahan kadar kalium dalam vitreous humor berdasarkan waktu sejak kematian:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Waktu sejak Kematian (Jam)</th>
+                            <th>Kadar Kalium (mmol/L)</th>
+                            <th>Perubahan</th>
+                            <th>Keandalan Estimasi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0-6</td>
+                            <td>3.5 - 5.0</td>
+                            <td>Stabil</td>
+                            <td>Rendah</td>
+                        </tr>
+                        <tr>
+                            <td>6-12</td>
+                            <td>5.0 - 7.5</td>
+                            <td>Mulai meningkat</td>
+                            <td>Sedang</td>
+                        </tr>
+                        <tr>
+                            <td>12-24</td>
+                            <td>7.5 - 10.5</td>
+                            <td>Meningkat signifikan</td>
+                            <td>Tinggi</td>
+                        </tr>
+                        <tr>
+                            <td>24-48</td>
+                            <td>10.5 - 15.0</td>
+                            <td>Meningkat cepat</td>
+                            <td>Sangat Tinggi</td>
+                        </tr>
+                        <tr>
+                            <td>48-72</td>
+                            <td>15.0 - 18.5</td>
+                            <td>Meningkat stabil</td>
+                            <td>Tinggi</td>
+                        </tr>
+                        <tr>
+                            <td>72-96</td>
+                            <td>18.5 - 21.0</td>
+                            <td>Meningkat melambat</td>
+                            <td>Sedang</td>
+                        </tr>
+                        <tr>
+                            <td>96+</td>
+                            <td>21.0+</td>
+                            <td>Stabilisasi</td>
+                            <td>Rendah</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Card Rumus Perhitungan -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-calculator"></i> Rumus Perhitungan PMI</h2>
+                <p>Berdasarkan penelitian Sturner dan rekan-rekan, waktu sejak kematian dapat diestimasi menggunakan rumus:</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center;">
+                    <strong>PMI (jam) = 7.14 × [K⁺] - 39.1</strong>
+                </div>
+                <p>Dimana [K⁺] adalah konsentrasi kalium dalam vitreous humor (mmol/L).</p>
+                <p>Contoh: Jika kadar kalium adalah 12 mmol/L, maka:</p>
+                <p>PMI = 7.14 × 12 - 39.1 = 85.68 - 39.1 = 46.58 jam (sekitar 47 jam)</p>
+            </div>
+            
+            <!-- Card Faktor yang Mempengaruhi -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-wind"></i> Faktor yang Mempengaruhi</h2>
+                <p>Beberapa faktor dapat memengaruhi akurasi estimasi PMI berdasarkan vitreous humor:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Faktor</th>
+                            <th>Pengaruh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Suhu Lingkungan</td>
+                            <td>Suhu tinggi mempercepat perubahan kimia</td>
+                        </tr>
+                        <tr>
+                            <td>Penyakit Mata</td>
+                            <td>Infeksi atau trauma dapat mengubah komposisi</td>
+                        </tr>
+                        <tr>
+                            <td>Gangguan Metabolik</td>
+                            <td>Diabetes, gagal ginjal memengaruhi kadar elektrolit</td>
+                        </tr>
+                        <tr>
+                            <td>Usia</td>
+                            <td>Komposisi vitreous humor berubah seiring penuaan</td>
+                        </tr>
+                        <tr>
+                            <td>Interval Kematian</td>
+                            <td>Akurasi menurun setelah 100 jam</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Card Aplikasi Forensik -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-search"></i> Aplikasi Forensik</h2>
+                <p>Analisis vitreous humor tidak hanya untuk estimasi PMI tetapi juga untuk:</p>
+                <ul class="factor-list">
+                    <li class="factor-item"><strong>Identifikasi penyebab kematian:</strong> Kadar glukosa yang tinggi dapat mengindikasikan kematian akibat diabetes</li>
+                    <li class="factor-item"><strong>Deteksi keracunan:</strong> Vitreous humor dapat mendeteksi berbagai obat dan racun</li>
+                    <li class="factor-item"><strong>Penentuan dehidrasi:</strong> Peningkatan kadar natrium dan urea mengindikasikan dehidrasi</li>
+                    <li class="factor-item"><strong>Konfirmasi hipotermia:</strong> Peningkatan kadar magnesium dapat mengindikasikan hipotermia</li>
+                </ul>
+            </div>
+            
+            <!-- Card Prosedur Pengambilan Sample -->
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-syringe"></i> Prosedur Pengambilan Sample</h2>
+                <p>Pengambilan sample vitreous humor harus dilakukan dengan hati-hati:</p>
+                <ol class="factor-list" style="padding-left: 30px;">
+                    <li class="factor-item">Desinfeksi area sekitar mata</li>
+                    <li class="factor-item">Menggunakan jarum suntik 5-10 mL</li>
+                    <li class="factor-item">Penyisipan jarum melalui sclera lateral</li>
+                    <li class="factor-item">Pengambilan 2-3 mL dari setiap mata</li>
+                    <li class="factor-item">Penyimpanan dalam wadah steril tanpa pengawet</li>
+                    <li class="factor-item">Analisis dalam waktu 24 jam atau penyimpanan pada -20°C</li>
+                </ol>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 Forensic Time Estimator | NOVY-25</p>
+        </footer>
+    </div>
+
+    <script>
+        // Membuat partikel latar belakang
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Ukuran dan posisi acak
+                const size = Math.random() * 20 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}vw`;
+                particle.style.top = `${posY}vh`;
+                
+                // Warna acak (ungu atau biru kehijauan)
+                const color = Math.random() > 0.5 ? '106, 90, 205' : '90, 205, 198';
+                particle.style.background = `rgba(${color}, ${0.2 + Math.random() * 0.3})`;
+                particle.style.boxShadow = `0 0 20px rgba(${color}, 0.5)`;
+                
+                // Animasi dengan durasi acak
+                const duration = Math.random() * 20 + 15;
+                particle.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Inisialisasi
+        window.addEventListener('load', function() {
+            createParticles();
+        });
+    </script>
+</body>
+</html>
